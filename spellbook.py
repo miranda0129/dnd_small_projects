@@ -1,10 +1,28 @@
 import requests
+import json
+
 
 def display_spell(spell_data):
-    print(f"Name: {spell_data['name']}")
-    print(f"Index: {spell_data['index']}")
-    print(f"URL: {spell_data['url']}")
-    print()
+    url = "https://www.dnd5eapi.co" +  spell_data['url']
+    headers = {'Accept' : 'application/json'}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        spell_data = response.json()
+        spell_description = spell_data['desc']
+
+        print(f"Name: {spell_data['name']}")
+
+        json_str = json.dumps(spell_description, indent=2)
+        new_list = json_str.replace("[", "").replace("]", "").replace('"', '')
+        print(new_list)
+
+        
+    else:
+        print(f"Name: {spell_data['name']}")
+        print(f"Index: {spell_data['index']}")
+        print(f"URL: {url}")
+        print()
 
 def main():
     url = "https://www.dnd5eapi.co/api/spells"
